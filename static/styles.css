@@ -1,0 +1,98 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e6e6e6;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+.input-container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+textarea {
+    width: 600px;
+    max-width: 100%;
+    height: 180px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.button-container button {
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.button-container img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.button-container img:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.summary {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 40px;
+    margin-left: 250px;
+    margin-right: 250px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
+}
+
+@media screen and (max-width: 600px) {
+    .input-container {
+        margin-left: 10px; /* Reduce the left margin to create more space */
+        margin-right: 10px; /* Reduce the right margin to create more space */
+    }
+
+    textarea {
+        width: 100%; /* Make the textarea occupy the full width */
+        height: 150px; /* Adjust the height for better mobile experience */
+        margin-bottom: 20px; /* Increase the margin to create more space */
+    }
+
+    .summary {
+        margin-left: 10px; /* Reduce the left margin to create more space */
+        margin-right: 10px; /* Reduce the right margin to create more space */
+    }
+}
