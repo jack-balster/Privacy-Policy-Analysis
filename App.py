@@ -3,24 +3,32 @@ from flask import Flask, render_template, request
 import openai
 import os
 
+# Create a Flask app instance
 app = Flask(__name__)
 
-# Replace YOUR_OPENAI_API_KEY with your actual API key
+# Set the OpenAI API key
 openai.api_key = "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"
 
+# Define a route for the index page that handles GET and POST requests
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    # Check if the request is a POST request
     if request.method == 'POST':
+        # Retrieve the user's input from the form field named 'privacy_agreement'
         privacy_agreement = request.form['privacy_agreement']
         if privacy_agreement:
             # Call the function to summarize the privacy agreement using ChatGPT
             summary = summarize_privacy_agreement(privacy_agreement)
         else:
+            # Default message 
             summary = "Please enter a privacy agreement in the input box above"
-
+            
+        # Render the 'index.html' template and pass the summary to display on the page
         return render_template('index.html', summary=summary)
+    # For GET requests or when the form is not submitted, render the 'index.html' template with an empty summary
     return render_template('index.html', summary='')
 
+# Function to summarize text 
 def summarize_privacy_agreement(text):
     # Check if the text exceeds the maximum token limit
     if len(text.split()) > 3500:
@@ -36,7 +44,7 @@ def summarize_privacy_agreement(text):
         if current_segment:
             segments.append(current_segment.strip())
 
-        # Summarize each segment separately
+        # Summarize each segment separately using ChatGPT model
         summaries = []
         for segment in segments:
             response = openai.ChatCompletion.create(
@@ -45,7 +53,7 @@ def summarize_privacy_agreement(text):
                     {"role": "system", "content": "Please summarize the following and include a list of all the things a user gives the company access to: "},
                     {"role": "user", "content": segment},
                 ],
-                max_tokens=500  # Increase the max_tokens value
+                max_tokens=500 
             )
             summary = response.choices[0].message["content"].strip()
             summaries.append(summary)
@@ -53,7 +61,7 @@ def summarize_privacy_agreement(text):
         # Combine the summaries from all segments
         final_summary = " ".join(summaries)
 
-        # Summarize the final summary
+        # Summarize the segments for the final summary
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -79,10 +87,9 @@ def summarize_privacy_agreement(text):
     return final_summary
 
 
-
+# Define route to get the summary for a specific preloaded company
 @app.route('/get_summary/<company>', methods=['GET'])
 def get_summary_by_company(company):
-    # You can replace the 'summary_text' dictionary with your own summaries for each company
     summary_text = {
         'meta': 'Meta\'s data policy states that the company collects and processes user data to support its various products, including Facebook, Instagram, and Messenger. The types of information collected depend on how users use the products, and some examples include user-provided content, networks and connections, usage data, information about transactions, and information provided by others. The company uses this data for personalization, improving products, ad targeting, measurement and analytics, research and development, and promoting safety and security. In addition to the summary of the data policy, the text also lists all the things users give the company access to, including personal information, connections and activities on the platform, location-related information, device information, online behavior and interactions with ads and content, survey and research responses, websites visited and ads seen off the platform, and more. Furthermore, the text mentions that the company shares information with third-party partners for product improvement and services but does not sell user information. There is also an emphasis on the company\'s commitment to privacy and users\' ability to access, rectify, port, and erase their data. Overall, the text provides a detailed and comprehensive overview of Meta\'s data policy and the user data the company has access to.',
         'snapchat': 'Snap Inc. is a technology company that offers various products and services, including Snapchat, Bitmoji, and Spectacles. When users use these services, they share information with the company. The three categories of information collected are information provided by users, information obtained through service usage, and information obtained from third parties. Users give Snapchat access to a wide range of information, including personal details, content created and shared on the platform, device information, location information, and information collected through cookies and other technologies. The company uses this information for various purposes, such as improving their products and services, personalizing advertising, enhancing user experience, conducting research, and enforcing their policies. User information may be shared with other Snapchatters, business partners, and the general public. Users also have control over their information through tools such as accessing, correcting, and deleting their information, modifying advertising preferences, and controlling communication with other Snapchatters. The company collects and processes personal information in the United States and other countries outside of the user\'s location.',
@@ -97,8 +104,9 @@ def get_summary_by_company(company):
 
     return summary
 
-
+# Main entry point
 if __name__ == '__main__':
-    # Use the PORT environment variable if available, otherwise use 5000 (for local development)
+    # Use the PORT environment variable if available, otherwise use 5000 for local dev
     port = int(os.environ.get('PORT', 5000))
+    # Start flask dev server
     app.run(host='0.0.0.0', port=port)
