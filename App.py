@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Set the OpenAI API key
-openai.api_key = "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"
+openai.api_key = "myApiKey"
 
 # Define a route for the index page that handles GET and POST requests
 @app.route('/', methods=['GET', 'POST'])
