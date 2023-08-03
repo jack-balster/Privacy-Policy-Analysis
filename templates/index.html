@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Privacy Agreement Summarizer</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>AI Powered Privacy Policy Analysis</h1>
+    <div class="input-container">
+        <form action="/" method="post">
+            <div class="button-container">
+                <label for="privacy_agreement">Enter Privacy Agreement:</label><br>
+                <textarea id="privacy_agreement" name="privacy_agreement" rows="15" cols="80" placeholder="&#10;&#10;Disclaimer: Please note that this app is powered by OpenAI's ChatGPT model and it may occasionally produce incorrect information. I highly recommend reading over the policies yourself and using this tool as a starting point to explore the policies more."></textarea><br>
+                <input type="submit" value="Summarize">
+            </div>
+        </form>
+    </div>
+    
+    <div class="button-container">
+        <p>View the AI powered analysis for one of these companies:</p>
+        <img id="tiktok" src="/static/tiktok.png" alt="TikTok" onclick="getSummary('tiktok')">
+        <img id="meta" src="/static/meta.png" alt="Meta" onclick="getSummary('meta')">
+        <img id="twitter" src="/static/twitter.png" alt="Twitter" onclick="getSummary('twitter')">
+        <img id="snapchat" src="/static/snapchat.png" alt="Snapchat" onclick="getSummary('snapchat')">
+        <img id="netflix" src="/static/netflix.png" alt="Netflix" onclick="getSummary('netflix')">
+        <img id="apple" src="/static/apple.png" alt="Apple" onclick="getSummary('apple')">
+        <img id="google" src="/static/google.png" alt="Google" onclick="getSummary('google')">
+    </div>
+
+    <h2>Analysis:</h2>
+    <p class="summary">{{ summary|safe }}</p>
+</body>
+
+<script>
+    // Function to handle button clicks
+    function getSummary(company) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/get_summary/' + company, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var summary = xhr.responseText;
+                document.querySelector('.summary').innerHTML = summary; // Update the summary content
+            }
+        };
+
+        xhr.send();
+    }
+
+    // Event listeners for button clicks
+    document.getElementById('meta').addEventListener('click', function() {
+        getSummary('meta');
+    });
+    document.getElementById('snapchat').addEventListener('click', function() {
+        getSummary('snapchat');
+    });
+    document.getElementById('tiktok').addEventListener('click', function() {
+        getSummary('tiktok');
+    });
+    document.getElementById('twitter').addEventListener('click', function() {
+        getSummary('twitter');
+    });
+    document.getElementById('netflix').addEventListener('click', function() {
+        getSummary('netflix');
+    });
+    document.getElementById('apple').addEventListener('click', function() {
+        getSummary('apple');
+    });
+    document.getElementById('google').addEventListener('click', function() {
+        getSummary('google');
+    });
+</script>
+
+</html>
